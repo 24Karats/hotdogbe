@@ -10,7 +10,7 @@ export class AudioManager {
     }
 
     loadBackgroundMusic() {
-        this.bgMusic = new Audio('/JAY PARK ft. NATTY (KISS OF LIFE) - TAXI BLURR INSTRUMENTAL.mp3');
+        this.bgMusic = new Audio('./JAY PARK ft. NATTY (KISS OF LIFE) - TAXI BLURR INSTRUMENTAL.mp3');
         this.bgMusic.loop = true; // 循環播放
         this.bgMusic.volume = this.volume;
 

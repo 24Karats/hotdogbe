@@ -15,7 +15,7 @@ export class CreatorMessage {
     createVideoElement() {
         // 創建 video 元素
         this.video = document.createElement('video');
-        this.video.src = '/creator_message.mp4'; // 影片檔案路徑
+        this.video.src = './creator_message.mp4'; // 影片檔案路徑
         this.video.controls = true; // 顯示播放控制
         this.video.style.position = 'fixed'; // 改用 fixed 定位
         this.video.style.display = 'none';

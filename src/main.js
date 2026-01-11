@@ -84,7 +84,7 @@ class Game {
 
     // Load ground image
     this.groundImage = new Image();
-    this.groundImage.src = '/ground.png';
+    this.groundImage.src = './ground.png';
     this.groundImageLoaded = false;
     this.groundImage.onload = () => {
       this.groundImageLoaded = true;

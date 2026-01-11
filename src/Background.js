@@ -24,7 +24,7 @@ export class Background {
             console.warn('⚠️ 無法載入背景圖片');
             this.imageLoaded = false;
         };
-        img.src = '/background_full.png';
+        img.src = './background_full.png';
         this.backgroundImage = img;
     }
 

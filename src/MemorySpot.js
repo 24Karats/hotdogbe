@@ -22,7 +22,7 @@ export class MemorySpot {
 
         // 載入熱狗圖片
         this.hotdogImage = new Image();
-        this.hotdogImage.src = '/hotdog.png';
+        this.hotdogImage.src = './hotdog.png';
         this.imageLoaded = false;
         this.hotdogImage.onload = () => {
             this.imageLoaded = true;

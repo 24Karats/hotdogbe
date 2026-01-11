@@ -54,7 +54,7 @@ export class Player {
             img.onerror = () => {
                 console.warn(`⚠️ 無法載入角色圖片: character_run_${i}.png`);
             };
-            img.src = `/character_run_${i}.png`;
+            img.src = `./character_run_${i}.png`;
             this.animationFrames.push(img);
         }
 
@@ -70,7 +70,7 @@ export class Player {
         this.jumpImage.onerror = () => {
             console.warn('⚠️ 無法載入跳躍圖片');
         };
-        this.jumpImage.src = '/character_jump.png';
+        this.jumpImage.src = './character_jump.png';
 
         // 載入蹲下圖片
         this.duckImage = new Image();
@@ -84,7 +84,7 @@ export class Player {
         this.duckImage.onerror = () => {
             console.warn('⚠️ 無法載入蹲下圖片');
         };
-        this.duckImage.src = '/character_duck.png';
+        this.duckImage.src = './character_duck.png';
     }
 
     // 更新玩家狀態

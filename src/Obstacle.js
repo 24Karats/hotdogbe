@@ -15,7 +15,7 @@ export class Obstacle {
             Obstacle.obstacleImage.onerror = () => {
                 console.warn('⚠️ 無法載入障礙物圖片');
             };
-            Obstacle.obstacleImage.src = '/obstacle.png';
+            Obstacle.obstacleImage.src = './obstacle.png';
         }
     }
 
