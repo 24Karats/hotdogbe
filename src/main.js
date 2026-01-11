@@ -72,7 +72,7 @@ class Game {
     // 追蹤最後生成位置,避免重疊
     this.lastObstacleX = 0;
     this.lastMemoryX = 0;
-    this.minSpawnDistance = 100; // 降低最小距離,允許哈逗寶生成 // 最小間距
+    this.minSpawnDistance = 50; // 最小間距
 
     // Initialize menu system
     this.mainMenu = new MainMenu(CONFIG.width, CONFIG.height);
