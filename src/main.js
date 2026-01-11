@@ -205,6 +205,7 @@ class Game {
         } else if (action === 'creator') {
           this.gameState = 'CREATOR';
           this.creatorMessage.show(); // 顯示影片
+          this.audioManager.pause(); // 暫停背景音樂
         } else if (action === 'history') {
           this.gameState = 'HISTORY';
           this.historyScreen.loadStats();
@@ -213,6 +214,7 @@ class Game {
         const action = this.creatorMessage.handleInput(e.key);
         if (action === 'back') {
           this.gameState = 'MENU';
+          this.audioManager.play(); // 恢復背景音樂
         }
       } else if (this.gameState === 'HISTORY') {
         const action = this.historyScreen.handleInput(e.key);
@@ -225,10 +227,18 @@ class Game {
     });
 
     // 添加觸控支援
-    this.canvas.addEventListener('click', (e) => {
+    const handleTouch = (e) => {
       const rect = this.canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      let x, y;
+
+      if (e.type === 'touchstart') {
+        e.preventDefault();
+        x = e.touches[0].clientX - rect.left;
+        y = e.touches[0].clientY - rect.top;
+      } else {
+        x = e.clientX - rect.left;
+        y = e.clientY - rect.top;
+      }
 
       if (this.gameState === 'MENU') {
         const action = this.mainMenu.handleTouch(x, y);
@@ -236,18 +246,23 @@ class Game {
           this.startGame();
         } else if (action === 'creator') {
           this.gameState = 'CREATOR';
-          this.creatorMessage.show(); // 顯示影片
+          this.creatorMessage.show();
+          this.audioManager.pause(); // 暫停背景音樂
         } else if (action === 'history') {
           this.gameState = 'HISTORY';
           this.historyScreen.loadStats();
         }
       }
-    });
+    };
+
+    this.canvas.addEventListener('click', handleTouch);
+    this.canvas.addEventListener('touchstart', handleTouch, { passive: false });
 
     // 監聽影片返回按鈕事件
     window.addEventListener('videoBack', () => {
       if (this.gameState === 'CREATOR') {
         this.gameState = 'MENU';
+        this.audioManager.play(); // 恢復背景音樂
       }
     });
   }
