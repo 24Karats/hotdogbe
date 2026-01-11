@@ -63,14 +63,19 @@ export class TouchControls {
 
         for (let i = 0; i < event.changedTouches.length; i++) {
             const touch = event.changedTouches[i];
-            const x = touch.clientX - rect.left;
-            const y = touch.clientY - rect.top;
+            // 修正座標計算,考慮 canvas 縮放
+            const x = (touch.clientX - rect.left) * (canvas.width / rect.width);
+            const y = (touch.clientY - rect.top) * (canvas.height / rect.height);
+
+            console.log('Game touch at:', x, y);
 
             // Check if touch is on any button
             for (const [key, button] of Object.entries(this.buttons)) {
                 const distToButton = Math.hypot(x - button.x, y - button.y);
+                console.log(`Distance to ${key} button:`, distToButton, 'radius:', button.radius);
 
                 if (distToButton < button.radius && !button.active) {
+                    console.log(`${key} button activated`);
                     button.active = true;
                     button.touchId = touch.identifier;
                     this.setButtonInput(button.action, true);

@@ -223,6 +223,7 @@ class Game {
         }
       } else if (this.isGameOver && (e.key === ' ' || e.key === 'Enter')) {
         this.restart();
+        this.gameState = 'PLAYING';
       }
     });
 
@@ -265,6 +266,11 @@ class Game {
           this.gameState = 'HISTORY';
           this.historyScreen.loadStats();
         }
+      } else if (this.isGameOver) {
+        // 遊戲結束時,點擊任意位置重新開始
+        console.log('Game over - restarting');
+        this.restart();
+        this.gameState = 'PLAYING';
       }
     };
 
