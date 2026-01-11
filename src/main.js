@@ -390,6 +390,7 @@ class Game {
     // 生成新記憶點
     this.memorySpawnTimer++;
     if (this.memorySpawnTimer > this.memorySpawnInterval) {
+      console.log('⏰ 記憶點生成計時器觸發, timer:', this.memorySpawnTimer, 'interval:', this.memorySpawnInterval);
       this.spawnMemorySpot();
       this.memorySpawnTimer = 0;
     }
