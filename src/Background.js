@@ -30,8 +30,11 @@ export class Background {
 
     // 更新背景位置
     update(camera) {
-        // 輕微的視差效果
-        this.bgOffset = camera.x * 0.3;
+        // 自動緩慢捲動背景
+        this.bgOffset += 0.5; // 每幀移動0.5像素，創造緩慢捲動效果
+
+        // 也可以加上輕微的視差效果（可選）
+        // this.bgOffset += camera.x * 0.1;
     }
 
     // 渲染背景

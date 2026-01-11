@@ -5,7 +5,7 @@ export const memories = [
     {
         id: 1,
         type: 'photo',
-        title: '我們的第一次約會',
+        title: '哈逗寶',
         x: 600,
         data: {
             date: '2024/01/15',
@@ -18,7 +18,7 @@ export const memories = [
     {
         id: 2,
         type: 'text',
-        title: '告白的那一天',
+        title: '哈逗寶',
         x: 1100,
         data: {
             date: '2024/02/14',
@@ -28,7 +28,7 @@ export const memories = [
     {
         id: 3,
         type: 'photo',
-        title: '第一次旅行',
+        title: '哈逗寶',
         x: 1600,
         data: {
             date: '2024/05/20',
@@ -40,7 +40,7 @@ export const memories = [
     {
         id: 4,
         type: 'text',
-        title: '一週年快樂！',
+        title: '哈逗寶',
         x: 2200,
         data: {
             date: '2025/01/15',

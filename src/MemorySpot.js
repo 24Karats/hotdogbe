@@ -1,4 +1,4 @@
-// MemorySpot - 回憶地點標記
+// MemorySpot - 回憶地點標記（可收集道具）
 export class MemorySpot {
     constructor(memoryData, config) {
         this.id = memoryData.id;
@@ -10,30 +10,63 @@ export class MemorySpot {
 
         this.width = 40;
         this.height = 60;
-        this.interactionRange = 80;
+        this.isActive = true;
+        this.isCollected = false;
 
         // 動畫
         this.floatOffset = 0;
         this.glowIntensity = 0;
 
-        this.isPlayerNearby = false;
+        // 移動速度（會被遊戲速度調整）
+        this.baseSpeed = -5;
+
+        // 載入熱狗圖片
+        this.hotdogImage = new Image();
+        this.hotdogImage.src = '/hotdog.png';
+        this.imageLoaded = false;
+        this.hotdogImage.onload = () => {
+            this.imageLoaded = true;
+        };
     }
 
-    // 檢查玩家是否靠近
-    checkPlayerNearby(player) {
-        const distance = Math.abs(player.x - this.x);
-        this.isPlayerNearby = distance < this.interactionRange;
-        return this.isPlayerNearby;
+    // 檢查碰撞（自動收集）
+    checkCollision(player) {
+        if (this.isCollected) return false;
+
+        return (
+            player.x < this.x + this.width &&
+            player.x + player.width > this.x &&
+            player.y < this.y + this.height &&
+            player.y + player.height > this.y
+        );
     }
 
-    // 更新動畫
-    update() {
+    // 更新動畫和位置
+    update(gameSpeed) {
         this.floatOffset = Math.sin(Date.now() / 500) * 5;
         this.glowIntensity = (Math.sin(Date.now() / 300) + 1) / 2;
+
+        // 自動向左移動
+        if (!this.isCollected) {
+            this.x += this.baseSpeed * gameSpeed;
+
+            // 如果移出螢幕左側，標記為不活躍
+            if (this.x + this.width < 0) {
+                this.isActive = false;
+            }
+        }
+    }
+
+    // 標記為已收集
+    collect() {
+        this.isCollected = true;
+        this.isActive = false;
     }
 
     // 渲染回憶地點
     render(ctx, camera) {
+        if (this.isCollected) return;
+
         const screenX = camera.toScreenX(this.x);
         const screenY = camera.toScreenY(this.y + this.floatOffset);
 
@@ -57,44 +90,19 @@ export class MemorySpot {
             this.height * 2
         );
 
-        // 繪製主體（書本/相框圖示）
-        ctx.fillStyle = '#FFD700';
-        ctx.strokeStyle = '#FFA500';
-        ctx.lineWidth = 2;
-
-        // 書本形狀
-        ctx.fillRect(screenX, screenY, this.width, this.height);
-        ctx.strokeRect(screenX, screenY, this.width, this.height);
-
-        // 書本細節
-        ctx.strokeStyle = '#FFA500';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(screenX + this.width / 2, screenY);
-        ctx.lineTo(screenX + this.width / 2, screenY + this.height);
-        ctx.stroke();
-
-        // 愛心圖示
-        this.drawHeart(
-            ctx,
-            screenX + this.width / 2,
-            screenY + this.height / 2,
-            10,
-            '#FF6B6B'
-        );
-
-        // 如果玩家靠近，顯示標題
-        if (this.isPlayerNearby) {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            ctx.fillRect(screenX - 50, screenY - 30, 140, 25);
-
-            ctx.fillStyle = '#FFFFFF';
-            ctx.font = '12px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText(this.title, screenX + this.width / 2, screenY - 12);
-
-            ctx.font = '10px Arial';
-            ctx.fillText('按 E 互動', screenX + this.width / 2, screenY - 2);
+        // 繪製熱狗圖片
+        if (this.imageLoaded && this.hotdogImage) {
+            ctx.drawImage(
+                this.hotdogImage,
+                screenX,
+                screenY,
+                this.width,
+                this.height
+            );
+        } else {
+            // 備用：繪製簡單的方塊
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(screenX, screenY, this.width, this.height);
         }
     }
 
