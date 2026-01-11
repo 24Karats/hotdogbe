@@ -13,6 +13,7 @@ import { MainMenu } from './MainMenu.js';
 import { CreatorMessage } from './CreatorMessage.js';
 import { HistoryScreen } from './HistoryScreen.js';
 import { AudioManager } from './AudioManager.js';
+import { EasterEggVideo } from './EasterEggVideo.js';
 
 // Game Configuration
 const CONFIG = {
@@ -93,6 +94,12 @@ class Game {
 
     // Initialize audio manager
     this.audioManager = new AudioManager();
+
+    // Initialize Easter Egg Video Player
+    this.easterEggVideo = new EasterEggVideo();
+    this.obstaclesDodged = 0; // 閃避障礙物計數
+    this.easterEgg1222Triggered = false; // 1222分彩蛋
+    this.easterEgg69Triggered = false; // 69個障礙彩蛋
 
     // Menu input handler
     this.setupMenuInput();
@@ -295,6 +302,38 @@ class Game {
     });
   }
 
+  // 觸發彩蛋影片
+  triggerEasterEgg(type) {
+    console.log('🎉 彩蛋觸發!', type);
+
+    // 暫停遊戲
+    const wasGameOver = this.isGameOver;
+    this.isGameOver = true;
+
+    // 暫停音樂
+    this.audioManager.pause();
+
+    // 選擇影片路徑
+    let videoPath = './creator_message.mp4'; // 預設影片
+    if (type === '1222score') {
+      videoPath = './easter_egg_1222.mp4';
+      console.log('🎊 達成1222分彩蛋!');
+    } else if (type === '69obstacles') {
+      videoPath = './easter_egg_69.mp4';
+      console.log('🎊 閃避69個障礙彩蛋!');
+    }
+
+    // 播放彩蛋影片
+    this.easterEggVideo.play(videoPath, () => {
+      // 影片播放完成後恢復遊戲
+      console.log('彩蛋影片播放完成,恢復遊戲');
+      this.isGameOver = wasGameOver;
+      if (!wasGameOver) {
+        this.audioManager.play();
+      }
+    });
+  }
+
   // 開始遊戲
   startGame() {
     this.gameState = 'PLAYING';
@@ -367,6 +406,14 @@ class Game {
       // 移除不活躍的障礙物
       if (!obstacle.isActive) {
         this.obstacles.splice(i, 1);
+        this.obstaclesDodged++; // 成功閃避計數
+        console.log('閃避障礙物數:', this.obstaclesDodged);
+
+        // 檢查69個障礙彩蛋
+        if (this.obstaclesDodged === 69 && !this.easterEgg69Triggered) {
+          this.easterEgg69Triggered = true;
+          this.triggerEasterEgg('69obstacles');
+        }
       }
     }
 
@@ -412,6 +459,15 @@ class Game {
 
     // 更新背景
     this.background.update(this.camera);
+
+    // 更新分數
+    this.score += this.gameSpeed * 0.056;
+
+    // 檢查1222分彩蛋
+    if (this.score >= 1222 && !this.easterEgg1222Triggered) {
+      this.easterEgg1222Triggered = true;
+      this.triggerEasterEgg('1222score');
+    }
 
     // 更新分數(基於時間) - 調整為5分鐘達到1222分
     // 5分鐘 = 300秒 = 18000幀 (60fps)
