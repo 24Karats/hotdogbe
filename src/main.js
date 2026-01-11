@@ -103,6 +103,7 @@ class Game {
 
   // 生成單個記憶點
   spawnMemorySpot() {
+    console.log('🌟 spawnMemorySpot 被調用');
     if (this.memoryIndex >= memories.length) {
       this.memoryIndex = 0; // 循環使用記憶資料
     }
