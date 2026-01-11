@@ -26,6 +26,11 @@ export class MemorySpot {
         this.imageLoaded = false;
         this.hotdogImage.onload = () => {
             this.imageLoaded = true;
+            console.log('✅ 哈逗寶圖片載入成功');
+        };
+        this.hotdogImage.onerror = (e) => {
+            console.error('❌ 哈逗寶圖片載入失敗:', this.hotdogImage.src, e);
+            this.imageLoaded = false;
         };
     }
 
@@ -101,6 +106,7 @@ export class MemorySpot {
             );
         } else {
             // 備用：繪製簡單的方塊
+            console.log('哈逗寶圖片未載入,使用備用方塊. imageLoaded:', this.imageLoaded);
             ctx.fillStyle = '#FFD700';
             ctx.fillRect(screenX, screenY, this.width, this.height);
         }
