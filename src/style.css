@@ -32,8 +32,8 @@ body {
   image-rendering: crisp-edges;
   max-width: 100%;
   height: auto;
-  /* Prevent touch behaviors on canvas */
-  touch-action: none;
+  /* Allow touch for menu but prevent gestures during gameplay */
+  touch-action: manipulation;
   -webkit-touch-callout: none;
   user-select: none;
   -webkit-user-select: none;

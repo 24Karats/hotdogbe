@@ -240,8 +240,11 @@ class Game {
         y = e.clientY - rect.top;
       }
 
+      console.log('Touch event:', e.type, 'at', x, y, 'gameState:', this.gameState);
+
       if (this.gameState === 'MENU') {
         const action = this.mainMenu.handleTouch(x, y);
+        console.log('Menu action:', action);
         if (action === 'start') {
           this.startGame();
         } else if (action === 'creator') {
