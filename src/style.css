@@ -6,8 +6,21 @@
 }
 
 body {
-  touch-action: none;
-  -webkit-touch-callout: none;
+  margin: 0;
+  padding: 0;
+  background: #1a1a2e;
+  font-family: Arial, sans-serif;
+  overflow: auto;
+  /* 允許滾動 */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Prevent text selection */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 #gameCanvas {
@@ -15,9 +28,25 @@ body {
   background-color: #87CEEB;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
+  max-width: 100%;
+  height: auto;
   /* Prevent touch behaviors on canvas */
   touch-action: none;
   -webkit-touch-callout: none;
   user-select: none;
   -webkit-user-select: none;
+}
+
+/* 橫屏模式優化 */
+@media (orientation: landscape) {
+  body {
+    overflow-y: auto;
+    align-items: flex-start;
+    padding: 20px 0;
+  }
+
+  #gameCanvas {
+    max-height: none;
+    width: auto;
+  }
 }
