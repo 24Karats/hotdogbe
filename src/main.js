@@ -233,14 +233,24 @@ class Game {
 
       if (e.type === 'touchstart') {
         e.preventDefault();
-        x = e.touches[0].clientX - rect.left;
-        y = e.touches[0].clientY - rect.top;
+        const touch = e.touches[0];
+        // 計算相對於 canvas 的座標,考慮縮放
+        x = (touch.clientX - rect.left) * (this.canvas.width / rect.width);
+        y = (touch.clientY - rect.top) * (this.canvas.height / rect.height);
       } else {
-        x = e.clientX - rect.left;
-        y = e.clientY - rect.top;
+        // 計算相對於 canvas 的座標,考慮縮放
+        x = (e.clientX - rect.left) * (this.canvas.width / rect.width);
+        y = (e.clientY - rect.top) * (this.canvas.height / rect.height);
       }
 
-      console.log('Touch event:', e.type, 'at', x, y, 'gameState:', this.gameState);
+      console.log('=== Touch Event Debug ===');
+      console.log('Event type:', e.type);
+      console.log('Client coords:', e.type === 'touchstart' ? e.touches[0].clientX : e.clientX,
+        e.type === 'touchstart' ? e.touches[0].clientY : e.clientY);
+      console.log('Canvas rect:', rect);
+      console.log('Canvas size:', this.canvas.width, 'x', this.canvas.height);
+      console.log('Calculated coords:', x, y);
+      console.log('Game state:', this.gameState);
 
       if (this.gameState === 'MENU') {
         const action = this.mainMenu.handleTouch(x, y);
