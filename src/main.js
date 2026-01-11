@@ -111,18 +111,26 @@ class Game {
     const spawnX = CONFIG.width + 100;
 
     // 檢查是否與最近的障礙物太近
-    if (Math.abs(spawnX - this.lastObstacleX) < this.minSpawnDistance) {
+    const distance = Math.abs(spawnX - this.lastObstacleX);
+    console.log('距離檢查: spawnX=', spawnX, 'lastObstacleX=', this.lastObstacleX, 'distance=', distance, 'minDistance=', this.minSpawnDistance);
+    if (distance < this.minSpawnDistance) {
+      console.log('❌ 與障礙物太近,跳過生成');
       return; // 跳過這次生成,等下一次
     }
+    console.log('✓ 距離檢查通過');
 
     const memoryData = {
       ...memories[this.memoryIndex],
       x: spawnX
     };
 
-    this.memorySpots.push(new MemorySpot(memoryData, CONFIG));
+    console.log('準備創建 MemorySpot, memoryData:', memoryData);
+    const memorySpot = new MemorySpot(memoryData, CONFIG);
+    console.log('MemorySpot 已創建:', memorySpot);
+    this.memorySpots.push(memorySpot);
     this.lastMemoryX = spawnX;
     this.memoryIndex++;
+    console.log('✅ 哈逗寶已加入陣列! 總數:', this.memorySpots.length);
   }
 
   // 生成障礙物
