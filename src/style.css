@@ -21,6 +21,8 @@ body {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  /* Allow touch but prevent callout */
+  -webkit-touch-callout: none;
 }
 
 #gameCanvas {

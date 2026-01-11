@@ -60,51 +60,6 @@ export class MainMenu {
 
     // 處理觸控輸入
     handleTouch(x, y) {
-        // 虛擬按鈕位置 (右下角)
-        const buttonSize = 60;
-        const buttonSpacing = 70;
-        const rightX = this.width - 80;
-        const bottomY = this.height - 80;
-
-        // 上按鈕
-        const upButton = {
-            x: rightX - buttonSpacing,
-            y: bottomY - buttonSpacing,
-            size: buttonSize
-        };
-
-        // 下按鈕
-        const downButton = {
-            x: rightX - buttonSpacing,
-            y: bottomY,
-            size: buttonSize
-        };
-
-        // 確認按鈕
-        const selectButton = {
-            x: rightX,
-            y: bottomY - buttonSpacing / 2,
-            size: buttonSize
-        };
-
-        // 檢查虛擬按鈕點擊
-        const distToUp = Math.hypot(x - upButton.x, y - upButton.y);
-        const distToDown = Math.hypot(x - downButton.x, y - downButton.y);
-        const distToSelect = Math.hypot(x - selectButton.x, y - selectButton.y);
-
-        if (distToUp < buttonSize / 2) {
-            // 上移選項
-            this.selectedIndex = (this.selectedIndex - 1 + this.options.length) % this.options.length;
-            return null;
-        } else if (distToDown < buttonSize / 2) {
-            // 下移選項
-            this.selectedIndex = (this.selectedIndex + 1) % this.options.length;
-            return null;
-        } else if (distToSelect < buttonSize / 2) {
-            // 確認選擇
-            return this.options[this.selectedIndex].action;
-        }
-
         // 檢查直接點擊選單選項
         const startY = 300;
         const spacing = 80;
@@ -214,54 +169,6 @@ export class MainMenu {
         ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
         ctx.font = '16px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('使用 ↑↓ 或 W/S 選擇，Enter 或 空白鍵 確認', this.width / 2, this.height - 30);
-
-        // 繪製虛擬按鈕 (手機用)
-        if ('ontouchstart' in window) {
-            this.drawVirtualButtons(ctx);
-        }
-    }
-
-    drawVirtualButtons(ctx) {
-        const buttonSize = 60;
-        const buttonSpacing = 70;
-        const rightX = this.width - 80;
-        const bottomY = this.height - 80;
-
-        // 上按鈕
-        ctx.fillStyle = 'rgba(255, 105, 180, 0.7)';
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(rightX - buttonSpacing, bottomY - buttonSpacing, buttonSize / 2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.fillStyle = '#FFFFFF';
-        ctx.font = 'bold 24px Arial';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('▲', rightX - buttonSpacing, bottomY - buttonSpacing);
-
-        // 下按鈕
-        ctx.fillStyle = 'rgba(255, 105, 180, 0.7)';
-        ctx.beginPath();
-        ctx.arc(rightX - buttonSpacing, bottomY, buttonSize / 2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fillText('▼', rightX - buttonSpacing, bottomY);
-
-        // 確認按鈕
-        ctx.fillStyle = 'rgba(255, 215, 0, 0.8)';
-        ctx.beginPath();
-        ctx.arc(rightX, bottomY - buttonSpacing / 2, buttonSize / 2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.fillStyle = '#000000';
-        ctx.font = 'bold 20px Arial';
-        ctx.fillText('✓', rightX, bottomY - buttonSpacing / 2);
+        ctx.fillText('點擊選項或使用 ↑↓ 鍵選擇', this.width / 2, this.height - 30);
     }
 }
