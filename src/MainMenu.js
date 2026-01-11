@@ -60,6 +60,58 @@ export class MainMenu {
 
     // 處理觸控輸入
     handleTouch(x, y) {
+        console.log('MainMenu handleTouch called:', x, y);
+
+        // 虛擬按鈕 (更大的按鈕,更容易點擊)
+        const buttonSize = 80; // 增大按鈕
+        const buttonSpacing = 100;
+        const rightMargin = 100;
+        const bottomMargin = 100;
+
+        const rightX = this.width - rightMargin;
+        const bottomY = this.height - bottomMargin;
+
+        // 上按鈕位置
+        const upButton = {
+            x: rightX - buttonSpacing,
+            y: bottomY - buttonSpacing,
+            radius: buttonSize / 2
+        };
+
+        // 下按鈕位置
+        const downButton = {
+            x: rightX - buttonSpacing,
+            y: bottomY,
+            radius: buttonSize / 2
+        };
+
+        // 確認按鈕位置
+        const selectButton = {
+            x: rightX,
+            y: bottomY - buttonSpacing / 2,
+            radius: buttonSize / 2
+        };
+
+        // 檢查虛擬按鈕點擊
+        const distToUp = Math.hypot(x - upButton.x, y - upButton.y);
+        const distToDown = Math.hypot(x - downButton.x, y - downButton.y);
+        const distToSelect = Math.hypot(x - selectButton.x, y - selectButton.y);
+
+        console.log('Button distances - Up:', distToUp, 'Down:', distToDown, 'Select:', distToSelect);
+
+        if (distToUp < upButton.radius) {
+            console.log('Up button clicked');
+            this.selectedIndex = (this.selectedIndex - 1 + this.options.length) % this.options.length;
+            return null;
+        } else if (distToDown < downButton.radius) {
+            console.log('Down button clicked');
+            this.selectedIndex = (this.selectedIndex + 1) % this.options.length;
+            return null;
+        } else if (distToSelect < selectButton.radius) {
+            console.log('Select button clicked, action:', this.options[this.selectedIndex].action);
+            return this.options[this.selectedIndex].action;
+        }
+
         // 檢查直接點擊選單選項
         const startY = 300;
         const spacing = 80;
@@ -73,10 +125,13 @@ export class MainMenu {
 
             if (x >= buttonX && x <= buttonX + buttonWidth &&
                 y >= buttonTop && y <= buttonTop + buttonHeight) {
+                console.log('Menu option', i, 'clicked directly');
                 this.selectedIndex = i;
                 return this.options[i].action;
             }
         }
+
+        console.log('No button clicked');
         return null;
     }
 
@@ -169,6 +224,55 @@ export class MainMenu {
         ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
         ctx.font = '16px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('點擊選項或使用 ↑↓ 鍵選擇', this.width / 2, this.height - 30);
+        ctx.fillText('點擊選項或使用虛擬按鈕', this.width / 2, this.height - 30);
+
+        // 繪製虛擬按鈕
+        this.drawVirtualButtons(ctx);
+    }
+
+    drawVirtualButtons(ctx) {
+        const buttonSize = 80;
+        const buttonSpacing = 100;
+        const rightMargin = 100;
+        const bottomMargin = 100;
+
+        const rightX = this.width - rightMargin;
+        const bottomY = this.height - bottomMargin;
+
+        // 上按鈕
+        ctx.fillStyle = 'rgba(255, 105, 180, 0.8)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(rightX - buttonSpacing, bottomY - buttonSpacing, buttonSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 32px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('▲', rightX - buttonSpacing, bottomY - buttonSpacing);
+
+        // 下按鈕
+        ctx.fillStyle = 'rgba(255, 105, 180, 0.8)';
+        ctx.beginPath();
+        ctx.arc(rightX - buttonSpacing, bottomY, buttonSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillText('▼', rightX - buttonSpacing, bottomY);
+
+        // 確認按鈕 (更大更明顯)
+        ctx.fillStyle = 'rgba(255, 215, 0, 0.9)';
+        ctx.beginPath();
+        ctx.arc(rightX, bottomY - buttonSpacing / 2, buttonSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 28px Arial';
+        ctx.fillText('✓', rightX, bottomY - buttonSpacing / 2);
     }
 }
